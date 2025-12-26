@@ -1,11 +1,14 @@
-use anyhow::Result;
+use anyhow::{Result, bail};
 use clap::Parser;
+use owo_colors::OwoColorize;
+use palette::Srgb;
 
-use crate::cli::Mode;
+use crate::{cli::Mode, colors::convert::FromHexToSrgbf32, utils::WARNING_MSG};
 
 mod cli;
 mod colors;
 mod dms;
+mod utils;
 
 fn main() -> Result<()> {
     let cmd = cli::Cli::parse();
@@ -15,7 +18,29 @@ fn main() -> Result<()> {
         Mode::Light => true,
     };
 
-    let color = dms::generate_ansi(&cmd.color)?;
+    let color: Srgb<f32> = if cmd.from_srgb {
+        let rgb: Vec<&str> = cmd.color.split(",").collect();
+
+        let (r, g, b) = match rgb.as_slice() {
+            [first, second, third] => (
+                first.parse::<f32>()?,
+                second.parse::<f32>()?,
+                third.parse::<f32>()?,
+            ),
+            _ => bail!("Rgb value is incorrect!"),
+        };
+        Srgb::new(r, g, b).into_format()
+    } else {
+        Srgb::from_hex(&cmd.color)?.into_format()
+    };
+
+    let color = match cmd.backend {
+        cli::BackEnd::Dms => dms::generate_ansi_dps(&color)?,
+        cli::BackEnd::DmsWcag => {
+            println!("{} Not supported now.", WARNING_MSG.yellow().bold());
+            dms::generate_ansi_dps(&color)?
+        }
+    };
 
     for (index, color) in color.normal.iter().chain(color.bright.iter()).enumerate() {
         println!("{} = {}", index, color)

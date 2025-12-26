@@ -1,8 +1,8 @@
 use crate::{
-    colors::{convert::{ColorExt, FromHexToSrgbf32}, unified::AnsiPaletteHex},
+    colors::{convert::ColorExt, unified::AnsiPaletteHex},
     dms::calculator::AnsiResult,
 };
-use anyhow::{Result};
+use anyhow::Result;
 use palette::{Hsv, Srgb};
 
 mod balance_contrast;
@@ -22,19 +22,16 @@ pub fn derive_container(color: &Hsv) -> Hsv {
     )
 }
 
-pub fn generate_ansi(primary: &str) -> Result<AnsiPaletteHex> {
-    let hsv = Srgb::from_hex(primary)?.to_hsv();
+pub fn generate_ansi_dps(primary: &Srgb<f32>) -> Result<AnsiPaletteHex> {
+    let hsv = primary.to_hsv();
     let based = derive_container(&hsv);
 
     const NORMAL_TEXT_TARGET: f32 = 40.0;
     const SECONDARY_TARGET: f32 = 35.0;
 
-    let ansi = AnsiResult::get(
-        &hsv,
-        &based,
-    )?;
+    let ansi = AnsiResult::get(&hsv, &based)?;
 
     let ansi = ansi.balance_dps_itself(NORMAL_TEXT_TARGET, SECONDARY_TARGET);
 
-    Ok(ansi.into_hex())
+    Ok(ansi.to_hex())
 }

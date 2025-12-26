@@ -5,9 +5,16 @@
 use palette::Hsv;
 
 #[repr(u8)]
-enum AnsiIndex {
-    Black, Red, Green, Yellow,
-    Blue, Magenta, Cyan, White,
+#[derive(Copy, Clone)]
+pub enum AnsiIndex {
+    Black = 0,
+    Red,
+    Green,
+    Yellow,
+    Blue,
+    Magenta,
+    Cyan,
+    White,
 }
 
 pub struct BasedAnsi<T>([T; 8]);
@@ -35,4 +42,5 @@ impl<T: Clone> AnsiPalette<T> {
 }
 
 pub type AnsiPaletteHex = AnsiPalette<String>;
+#[allow(dead_code)]
 pub type AnsiPaletteHsv = AnsiPalette<Hsv>;
