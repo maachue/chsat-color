@@ -150,24 +150,24 @@ impl AnsiResult {
         let sat_val = AnsiSV::from_color(color, container)?;
         let hues = HueWheel::from_color(color, container)?;
 
-        let normal: [Hsv; 8] = {
+        let new_normal: [Hsv; 8] = {
             let mut temp: Vec<Hsv> = Vec::with_capacity(8);
             for (hue, sv) in hues.normal.iter().zip(sat_val.normal.iter()) {
-                temp.push(Hsv::new(*hue, (*sv).0, (*sv).1));
+                temp.push(Hsv::new(*hue, sv.0, sv.1));
             }
             temp.try_into().expect("Err!")
         };
-        let bright: [Hsv; 8] = {
+        let new_bright: [Hsv; 8] = {
             let mut temp: Vec<Hsv> = Vec::with_capacity(8);
             for (hue, sv) in hues.bright.iter().zip(sat_val.bright.iter()) {
-                temp.push(Hsv::new(*hue, (*sv).0, (*sv).1));
+                temp.push(Hsv::new(*hue, sv.0, sv.1));
             }
             temp.try_into().expect("Err!")
         };
 
         Ok(Self {
-            normal: normal,
-            bright: bright,
+            normal: new_normal,
+            bright: new_bright,
         })
     }
     pub fn balance_dps_itself(&self, target_normal: f32, target_bright: f32) -> Self {

@@ -1,6 +1,6 @@
 use palette::{Clamp, Hsv, Lab};
 
-use crate::colors::{convert::{ColorExt}, delta::delta_phi_star};
+use crate::colors::{convert::ColorExt, delta::delta_phi_star};
 
 fn dps_ba(color1: &Lab, color2: &Lab, is_light: bool) -> f32 {
     if !is_light {
@@ -24,7 +24,7 @@ pub fn balance_contrast_dps_l_star(color: &Hsv, bg: &Hsv, min_l: f32, is_light: 
     const STEP: f32 = 0.5;
 
     for _ in 0..120 {
-        lf = f32::max(0.0, f32::min(100.0, lf + dir * STEP));
+        lf = (lf + dir * STEP).clamp(0.0, 100.0);
         let cand = Lab::new(lf, af, bf);
         if dps_ba(&cand, &bg.to_lab(), is_light) >= min_l {
             return cand.to_hsv();
