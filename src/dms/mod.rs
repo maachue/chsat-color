@@ -1,3 +1,30 @@
+/*
+ * This module is based on the **DMS color algorithm**
+ * originally implemented by **DankMaterialShell**.
+ * 
+ * Original algorithm  
+ * © 2025 Avenge Media LLC — MIT License
+ * 
+ * This repository provides a **clean-room reimplementation**
+ * written in Rust, with **significant structural and behavioral differences**
+ * from the original implementation.
+ * 
+ * All Rust source code in this repository:  
+ * © 2025 Maachue — MIT License
+*/
+
+/*
+ * NOTE:
+ * Parts of this backend were developed with the assistance of a
+ * **Large Language Model (LLM)**, primarily for refactoring, debugging,
+ * and iterative validation during development.
+ * 
+ * The author is **not a color science expert**.
+ *
+ * This software is provided **as-is** and should be evaluated carefully
+ * before use.
+*/
+
 use crate::{
     colors::{convert::ColorExt, unified::AnsiPaletteHex},
     dms::calculator::AnsiResult,
