@@ -1,9 +1,15 @@
+use std::time::Instant;
+
 use anyhow::{Result, bail};
 use clap::Parser;
 use owo_colors::OwoColorize;
 use palette::Srgb;
 
-use crate::{cli::Mode, colors::convert::FromHexToSrgbf32, utils::WARNING_MSG};
+use crate::{
+    cli::Mode,
+    colors::convert::FromHexToSrgbf32,
+    utils::{DOING_WORK_MSG, WARN_MSG},
+};
 
 mod cli;
 mod colors;
@@ -13,6 +19,20 @@ mod utils;
 
 fn main() -> Result<()> {
     let cmd = cli::Cli::parse();
+
+    if cmd.verbose {
+        eprintln!(
+            "{} ANSI palette with `{}` backend and {} mode",
+            DOING_WORK_MSG.style("   Calculating"),
+            cmd.backend,
+            cmd.mode
+        )
+    }
+
+    let start: Option<Instant> = match cmd.verbose {
+        true => Some(Instant::now()),
+        false => None,
+    };
 
     let _light_huh = match cmd.mode {
         Mode::Dark => false,
@@ -38,10 +58,20 @@ fn main() -> Result<()> {
     let color = match cmd.backend {
         cli::BackEnd::Dms => dms::generate_ansi_dps(&color)?,
         cli::BackEnd::DmsWcag => {
-            println!("{} Not supported now.", WARNING_MSG.yellow().bold());
+            eprintln!("{}: `{}` backend is not supported", WARN_MSG, cmd.backend);
+            eprintln!("{}: using `DMS` backend instead", "note".bold());
             dms::generate_ansi_dps(&color)?
         }
     };
+
+    if let Some(start) = start {
+        let elapsed = start.elapsed();
+        eprintln!(
+            "{} calculate in {}s",
+            DOING_WORK_MSG.style("    Finished"),
+            elapsed.as_secs_f64(),
+        );
+    }
 
     match cmd.json_dump {
         true => display::json_dump(&color)?,

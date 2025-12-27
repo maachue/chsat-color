@@ -11,6 +11,9 @@ pub struct Cli {
     #[arg(long)]
     pub json_dump: bool,
 
+    #[arg(long)]
+    pub verbose: bool,
+
     #[arg(long, default_value = "dms")]
     pub backend: BackEnd,
 
@@ -24,8 +27,26 @@ pub enum BackEnd {
     DmsWcag,
 }
 
+impl std::fmt::Display for BackEnd {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            BackEnd::Dms => write!(f, "DMS"),
+            BackEnd::DmsWcag => write!(f, "DMS-WCAG"),
+        }
+    }
+}
+
 #[derive(ValueEnum, Clone, Copy, Debug)]
 pub enum Mode {
     Dark,
     Light,
+}
+
+impl std::fmt::Display for Mode {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Mode::Dark => write!(f, "dark"),
+            Mode::Light => write!(f, "light"),
+        }
+    }
 }
