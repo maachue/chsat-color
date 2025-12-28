@@ -17,7 +17,7 @@ mod cli;
 mod display;
 mod utils;
 
-mod apply;
+mod term;
 
 mod dms;
 
@@ -26,6 +26,10 @@ fn main() -> Result<()> {
 
     if cmd.json_dump {
         cmd.dump = DumpMode::JsonSimplified;
+    }
+
+    if cmd.apply || std::env::consts::OS == "windows" {
+        eprintln!("{}: `--apply` flag hasn't support windows yet.", WARN_MSG)
     }
 
     if let Some(stdin) = read_stdin() {
@@ -107,8 +111,7 @@ fn main() -> Result<()> {
     }
 
     if cmd.apply {
-        // apply::apply_ecapse_code(&colors)?;
-        apply::apply(&colors)?;
+        term::apply(&colors)?;
     }
 
     Ok(())

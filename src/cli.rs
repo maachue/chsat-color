@@ -19,7 +19,7 @@ pub struct Cli {
     #[arg(short = 'v')]
     pub verbose: bool,
 
-    #[arg(short, long = "apply-now", default_value_t = true)]
+    #[arg(short, long, default_value_t = true)]
     pub apply: bool,
 
     #[arg(short, long)]
