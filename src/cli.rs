@@ -43,25 +43,21 @@ impl std::fmt::Display for BackEnd {
 
 #[derive(ValueEnum, Clone, Copy, Debug)]
 pub enum DumpMode {
-    #[value(
-        name = "HumanReadable",
-        alias = "human-readable",
-        alias = "human"
-    )]
+    #[value(name = "HumanReadable", alias = "human-readable", alias = "human")]
     HumanReadable,
 
     #[value(
-        name = "JsonSimplifed",
-        alias = "json-simplified",
-        alias = "json"
+        name = "Block",
+        alias = "HumanReadableBlock",
+        alias = "human-readable-block",
+        alias = "block"
     )]
+    Block,
+
+    #[value(name = "JsonSimplifed", alias = "json-simplified", alias = "json")]
     JsonSimplified,
 
-    #[value(
-        name = "JsonPretty",
-        alias = "json-pretty",
-        alias = "matugen"
-    )]
+    #[value(name = "JsonPretty", alias = "json-pretty", alias = "matugen")]
     JsonPretty,
 }
 

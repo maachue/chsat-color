@@ -1,6 +1,14 @@
 use anyhow::Result;
+use owo_colors::OwoColorize;
+use palette::Srgb;
 
-use crate::{colors::unified::AnsiPaletteHex, utils::DOING_WORK_MSG};
+use crate::{
+    colors::{
+        convert::{ColorExt, FromHexToSrgbf32},
+        unified::AnsiPaletteHex,
+    },
+    utils::DOING_WORK_MSG,
+};
 
 mod template;
 
@@ -24,6 +32,35 @@ pub fn json_dump_pretty(ansi: &AnsiPaletteHex) -> Result<()> {
     };
 
     println!("{}", serde_json::to_string_pretty(&json)?);
+
+    Ok(())
+}
+
+pub fn block(ansi: &AnsiPaletteHex) -> Result<()> {
+    const FORMAT: &str = "    ";
+    println!();
+    for c in ansi.normal.iter() {
+        print!("{}", FORMAT.on_color(Srgb::from_hex(c)?.to_owo()));
+    }
+    println!();
+    for c in ansi.bright.iter() {
+        print!("{}", FORMAT.on_color(Srgb::from_hex(c)?.to_owo()));
+    }
+    println!();
+
+    Ok(())
+}
+
+pub fn human_readable(ansi: &AnsiPaletteHex) -> Result<()> {
+    const FORMAT: &str = "    ";
+    println!();
+    for (i, c) in ansi.normal.iter().chain(ansi.bright.iter()).enumerate() {
+        println!(
+            "{:02} = {} {c}",
+            i,
+            FORMAT.on_color(Srgb::from_hex(c)?.to_owo())
+        );
+    }
 
     Ok(())
 }

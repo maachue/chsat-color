@@ -20,7 +20,7 @@ mod utils;
 mod dms;
 
 fn main() -> Result<()> {
-    let mut  cmd = cli::Cli::parse();
+    let mut cmd = cli::Cli::parse();
 
     if cmd.json_dump {
         cmd.dump = DumpMode::JsonSimplified;
@@ -30,19 +30,14 @@ fn main() -> Result<()> {
         cmd.color = stdin;
     }
 
-    if cmd.verbose {
-        eprintln!(
-            "{} ANSI palette with `{}` backend and {} mode",
-            DOING_WORK_MSG.style("   Calculating"),
-            cmd.backend,
-            cmd.mode
-        )
-    }
+    eprintln!(
+        "{} ANSI palette with `{}` backend and {} mode",
+        DOING_WORK_MSG.style("   Calculating"),
+        cmd.backend,
+        cmd.mode
+    );
 
-    let start: Option<Instant> = match cmd.verbose {
-        true => Some(Instant::now()),
-        false => None,
-    };
+    let start = Instant::now();
 
     let _light_huh = match cmd.mode {
         Mode::Dark => false,
@@ -76,24 +71,27 @@ fn main() -> Result<()> {
         _ => bail!("{}: `{}` backend is not supported", ERR_MSG, cmd.backend),
     };
 
-    if let Some(start) = start {
-        let elapsed = start.elapsed();
-        eprintln!(
-            "{} calculate in {}",
-            DOING_WORK_MSG.style("    Finished"),
-            utils::format_duration(elapsed),
-        );
-    }
+    let elapsed = start.elapsed();
+    eprintln!(
+        "{} calculate in {}",
+        DOING_WORK_MSG.style("    Finished"),
+        utils::format_duration(elapsed),
+    );
+
+    eprintln!("{} the palette", DOING_WORK_MSG.style("   Printing"));
 
     match cmd.dump {
-        DumpMode::HumanReadable => {
-            for (index, color) in colors.normal.iter().chain(colors.bright.iter()).enumerate() {
-                println!("{} = \"{}\"", index, color)
-            }
-        }
+        DumpMode::HumanReadable => display::human_readable(&colors)?,
+        DumpMode::Block => display::block(&colors)?,
         DumpMode::JsonSimplified => display::json_dump_simplified(&colors)?,
         DumpMode::JsonPretty => display::json_dump_pretty(&colors)?,
     }
+
+    eprintln!(
+        "\n{}{}",
+        DOING_WORK_MSG.style("    Finished"),
+        " ENJOY THE PALETTE".bold(),
+    );
 
     Ok(())
 }
