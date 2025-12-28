@@ -17,6 +17,8 @@ mod cli;
 mod display;
 mod utils;
 
+mod apply;
+
 mod dms;
 
 fn main() -> Result<()> {
@@ -30,14 +32,19 @@ fn main() -> Result<()> {
         cmd.color = stdin;
     }
 
-    eprintln!(
-        "{} ANSI palette with `{}` backend and {} mode",
-        DOING_WORK_MSG.style("   Calculating"),
-        cmd.backend,
-        cmd.mode
-    );
+    if !cmd.quiet {
+        eprintln!(
+            "{} ANSI palette with `{}` backend and {} mode",
+            DOING_WORK_MSG.style("   Calculating"),
+            cmd.backend,
+            cmd.mode
+        );
+    }
 
-    let start = Instant::now();
+    let start: Option<Instant> = match cmd.quiet {
+        false => Some(Instant::now()),
+        true => None,
+    };
 
     let _light_huh = match cmd.mode {
         Mode::Dark => false,
@@ -71,14 +78,18 @@ fn main() -> Result<()> {
         _ => bail!("{}: `{}` backend is not supported", ERR_MSG, cmd.backend),
     };
 
-    let elapsed = start.elapsed();
-    eprintln!(
-        "{} calculate in {}",
-        DOING_WORK_MSG.style("    Finished"),
-        utils::format_duration(elapsed),
-    );
+    if let Some(start) = start {
+        let elapsed = start.elapsed();
+        eprintln!(
+            "{} calculate in {}",
+            DOING_WORK_MSG.style("    Finished"),
+            utils::format_duration(elapsed),
+        );
+    }
 
-    eprintln!("{} the palette", DOING_WORK_MSG.style("   Printing"));
+    if !cmd.quiet {
+        eprintln!("{} the palette", DOING_WORK_MSG.style("   Printing"));
+    }
 
     match cmd.dump {
         DumpMode::HumanReadable => display::human_readable(&colors)?,
@@ -87,11 +98,18 @@ fn main() -> Result<()> {
         DumpMode::JsonPretty => display::json_dump_pretty(&colors)?,
     }
 
-    eprintln!(
-        "\n{}{}",
-        DOING_WORK_MSG.style("    Finished"),
-        " ENJOY THE PALETTE".bold(),
-    );
+    if !cmd.quiet {
+        eprintln!(
+            "\n{}{}",
+            DOING_WORK_MSG.style("    Finished"),
+            " ENJOY THE PALETTE".bold(),
+        );
+    }
+
+    if cmd.apply {
+        // apply::apply_ecapse_code(&colors)?;
+        apply::apply(&colors)?;
+    }
 
     Ok(())
 }

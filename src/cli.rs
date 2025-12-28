@@ -16,8 +16,14 @@ pub struct Cli {
     #[arg(long, default_value = "human-readable")]
     pub dump: DumpMode,
 
-    #[arg(long)]
+    #[arg(short = 'v')]
     pub verbose: bool,
+
+    #[arg(short, long = "apply-now", default_value_t = true)]
+    pub apply: bool,
+
+    #[arg(short, long)]
+    pub quiet: bool,
 
     #[arg(long, default_value = "dms")]
     pub backend: BackEnd,
