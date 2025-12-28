@@ -7,7 +7,6 @@ pub trait ToSrgb {
 }
 
 pub trait ColorExt: ToSrgb {
-    #[allow(unused)]
     fn to_hex(&self) -> String {
         let rgb = self.to_srgb().clamp();
         format!(
@@ -18,25 +17,17 @@ pub trait ColorExt: ToSrgb {
         )
     }
 
-    #[allow(unused)]
     fn to_lab(&self) -> Lab {
         self.to_srgb().clamp().into_color()
     }
 
-    #[allow(unused)]
     fn to_hsv(&self) -> Hsv {
         self.to_srgb().clamp().into_color()
     }
 
-    #[allow(unused)]
-    fn to_lch(&self) -> Lch {
-        self.to_srgb().clamp().into_color()
-    }
-
-    #[allow(unused)]
-    fn to_oklch(&self) -> Oklch {
-        self.to_srgb().clamp().into_color()
-    }
+    // fn to_oklch(&self) -> Oklch {
+    //     self.to_srgb().clamp().into_color()
+    // }
 }
 
 impl<T: ToSrgb> ColorExt for T {}
