@@ -43,3 +43,29 @@ fn get_seq(ansi: &AnsiPaletteHex) -> Result<String> {
     };
     Ok(str)
 }
+
+fn unix_term(ansi: &AnsiPaletteHex) -> Result<()> {
+    let sequences = get_seq(ansi)?;
+
+    let tty_pattern = "/dev/pts/[0-9]*";
+    let devices = glob::glob(tty_pattern).expect("glob pattern is ok");
+
+    for entry in devices {
+        match entry {
+            Ok(path) => {
+                if let Err(e) =
+                    File::create(&path).and_then(|mut o| o.write_all(sequences.as_bytes()))
+                {
+                    eprintln!(
+                        "{w}: couldn't write to {p}: {e}",
+                        p = path.display(),
+                        w = WARN_MSG,
+                    );
+                    continue;
+                }
+            }
+            Err(e) => anyhow::bail!("Error while sending sequences to terminals:\n{e}"),
+        }
+    }
+    Ok(())
+}
