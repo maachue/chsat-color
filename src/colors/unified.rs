@@ -30,6 +30,9 @@ impl<T> BasedAnsi<T> {
     pub fn iter(&self) -> impl Iterator<Item = &T> {
         self.0.iter()
     }
+    pub fn get_ro(&self, index: usize) -> &T {
+        return &self.0[index]
+    }
 }
 
 use std::array;

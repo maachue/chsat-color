@@ -44,7 +44,7 @@ fn get_seq(ansi: &AnsiPaletteHex) -> Result<String> {
     Ok(str)
 }
 
-fn unix_term(ansi: &AnsiPaletteHex) -> Result<()> {
+pub fn unix_term(ansi: &AnsiPaletteHex) -> Result<()> {
     let sequences = get_seq(ansi)?;
 
     let tty_pattern = "/dev/pts/[0-9]*";
