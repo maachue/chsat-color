@@ -1,5 +1,7 @@
 use clap::{Parser, ValueEnum};
 
+use crate::backend::{BackendEnum, BalanceContrast};
+
 #[derive(Parser, Debug)]
 #[command(version, long_about = None)]
 pub struct Cli {
@@ -25,26 +27,14 @@ pub struct Cli {
     #[arg(short, long)]
     pub quiet: bool,
 
-    #[arg(long, default_value = "dms")]
-    pub backend: BackEnd,
+    #[arg(short = 'B', long, default_value = "dms")]
+    pub backend: BackendEnum,
+
+    #[arg(short, long)]
+    pub balance: Option<BalanceContrast>,
 
     #[arg(long, default_value = "dark")]
     pub mode: Mode,
-}
-
-#[derive(ValueEnum, Clone, Copy, Debug)]
-pub enum BackEnd {
-    Dms,
-    DmsWcag,
-}
-
-impl std::fmt::Display for BackEnd {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            BackEnd::Dms => write!(f, "DMS"),
-            BackEnd::DmsWcag => write!(f, "DMS-WCAG"),
-        }
-    }
 }
 
 #[derive(ValueEnum, Clone, Copy, Debug)]

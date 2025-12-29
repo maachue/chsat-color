@@ -2,11 +2,10 @@ use anyhow::Result;
 use palette::{GetHue, Hsv, Lab, RgbHue, Srgb};
 
 use crate::{
-    colors::{
+    backend::dms::balance_contrast::balance_contrast_dps_l_star, colors::{
         convert::{ColorExt, FromHexToSrgbf32},
         unified::AnsiIndex,
-    },
-    dms::balance_contrast::balance_contrast_dps_l_star,
+    }
 };
 
 pub struct HueWheel {

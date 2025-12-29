@@ -3,7 +3,6 @@
 */
 
 use indexmap::IndexMap;
-use palette::Hsv;
 use serde::Serialize;
 
 #[repr(u8)]
@@ -36,7 +35,7 @@ impl<T> BasedAnsi<T> {
     }
 }
 
-use std::array;
+use std::{array, ops::Index};
 
 impl<T: Clone> AnsiPalette<T> {
     pub fn from_array(colors: &[T; 16]) -> Self {
@@ -71,6 +70,14 @@ impl<T: Clone> AnsiPalette<T> {
     }
 }
 
+impl<T> Index<usize> for BasedAnsi<T> {
+    type Output = T;
+
+    fn index(&self, index: usize) -> &Self::Output {
+        &self.0[index as usize]
+    }
+}
+
 #[derive(Serialize)]
 pub struct ViewerAsIndexMapAnsiPalette<'a, T> {
     pub normal: IndexMap<String, &'a T>,
@@ -78,5 +85,3 @@ pub struct ViewerAsIndexMapAnsiPalette<'a, T> {
 }
 
 pub type AnsiPaletteHex = AnsiPalette<String>;
-#[allow(dead_code)]
-pub type AnsiPaletteHsv = AnsiPalette<Hsv>;

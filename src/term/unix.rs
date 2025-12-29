@@ -44,6 +44,7 @@ fn get_seq(ansi: &AnsiPaletteHex) -> Result<String> {
     Ok(str)
 }
 
+/// TODO: support BSD, MacOS
 pub fn unix_term(ansi: &AnsiPaletteHex) -> Result<()> {
     let sequences = get_seq(ansi)?;
 

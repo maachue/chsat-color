@@ -36,6 +36,6 @@ before use.
 
 ## License
 
-This project is licensed under the **MIT License**.
+This module is licensed under the **MIT License**.
 
-See the [`LICENSE`](../../LICENSE) file for full license text.
+See the [`LICENSE`](../../../LICENSE) file for full license text.

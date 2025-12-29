@@ -6,9 +6,7 @@ use owo_colors::OwoColorize;
 use palette::Srgb;
 
 use crate::{
-    cli::{DumpMode, Mode},
-    colors::convert::FromHexToSrgbf32,
-    utils::{DOING_WORK_MSG, ERR_MSG, WARN_MSG, read_stdin},
+    backend::BackendStrategy, cli::{DumpMode, Mode}, colors::convert::FromHexToSrgbf32, utils::{DOING_WORK_MSG, ERR_MSG, WARN_MSG, read_stdin}
 };
 
 mod colors;
@@ -19,7 +17,7 @@ mod utils;
 
 mod term;
 
-mod dms;
+mod backend;
 
 fn main() -> Result<()> {
     let mut cmd = cli::Cli::parse();
@@ -72,12 +70,7 @@ fn main() -> Result<()> {
     };
 
     let colors = match cmd.backend {
-        cli::BackEnd::Dms => dms::generate_ansi_dps(&color)?,
-        cli::BackEnd::DmsWcag => {
-            eprintln!("{}: `{}` backend is not supported", WARN_MSG, cmd.backend);
-            eprintln!("{}: using `DMS` backend instead", "note".bold());
-            dms::generate_ansi_dps(&color)?
-        }
+        backend::BackendEnum::Dms => backend::Dms::generate(&color, cmd.balance)?,
         #[allow(unreachable_patterns)]
         _ => bail!("{}: `{}` backend is not supported", ERR_MSG, cmd.backend),
     };
