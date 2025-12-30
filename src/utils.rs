@@ -5,6 +5,8 @@ use owo_colors::{Style, Styled};
 pub const WARN_MSG: Styled<&'static str> = Style::new().yellow().bold().style("warning");
 pub const DOING_WORK_MSG: Style = Style::new().bright_green().bold();
 pub const ERR_MSG: Styled<&'static str> = Style::new().red().bold().style("error");
+#[allow(dead_code)]
+pub const NOTE_MSG: Styled<&'static str> = Style::new().bold().green().style("note");
 
 pub fn format_duration(d: Duration) -> String {
     match d {
@@ -17,9 +19,9 @@ pub fn format_duration(d: Duration) -> String {
 }
 
 pub fn read_stdin() -> Option<String> {
-    use std::io::{self, Read, IsTerminal};
+    use std::io::{self, IsTerminal, Read};
 
-    if ! io::stdin().is_terminal() {
+    if !io::stdin().is_terminal() {
         let mut buf = String::new();
         io::stdin().read_to_string(&mut buf).ok()?;
         Some(buf)

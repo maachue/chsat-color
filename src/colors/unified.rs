@@ -30,8 +30,9 @@ impl<T> BasedAnsi<T> {
         self.0.iter()
     }
     #[cfg(feature = "seq_win")]
+    #[allow(dead_code)] // clippy is too annoying
     pub fn get_ro(&self, index: usize) -> &T {
-        return &self.0[index]
+        &self.0[index]
     }
 }
 
@@ -74,7 +75,7 @@ impl<T> Index<usize> for BasedAnsi<T> {
     type Output = T;
 
     fn index(&self, index: usize) -> &Self::Output {
-        &self.0[index as usize]
+        &self.0[index]
     }
 }
 

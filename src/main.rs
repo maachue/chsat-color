@@ -6,7 +6,10 @@ use owo_colors::OwoColorize;
 use palette::Srgb;
 
 use crate::{
-    backend::BackendStrategy, cli::{DumpMode, Mode}, colors::convert::FromHexToSrgbf32, utils::{DOING_WORK_MSG, ERR_MSG, WARN_MSG, read_stdin}
+    backend::BackendStrategy,
+    cli::{DumpMode, Mode},
+    colors::convert::FromHexToSrgbf32,
+    utils::{DOING_WORK_MSG, ERR_MSG, WARN_MSG, read_stdin},
 };
 
 mod colors;
@@ -26,12 +29,12 @@ fn main() -> Result<()> {
         cmd.dump = DumpMode::JsonSimplified;
     }
 
-    if cmd.apply || std::env::consts::OS == "windows" {
+    if cmd.apply && std::env::consts::OS == "windows" {
         eprintln!("{}: `--apply` flag hasn't support windows yet.", WARN_MSG)
     }
 
     if let Some(stdin) = read_stdin() {
-        cmd.color = stdin;
+        cmd.color = Some(stdin); // NOTE: more safety by using `.trim()`. It will remove `\n`
     }
 
     if !cmd.quiet {
@@ -53,20 +56,28 @@ fn main() -> Result<()> {
         Mode::Light => true,
     };
 
-    let color: Srgb<f32> = if cmd.from_srgb {
-        let rgb: Vec<&str> = cmd.color.split(",").collect();
+    let color: Srgb<f32> = match cmd.color {
+        Some(color) => {
+            if cmd.from_srgb {
+                let rgb: Vec<&str> = color.split(",").collect();
 
-        let (r, g, b) = match rgb.as_slice() {
-            [first, second, third] => (
-                first.parse::<f32>()?,
-                second.parse::<f32>()?,
-                third.parse::<f32>()?,
-            ),
-            _ => bail!("Rgb value is incorrect!"),
-        };
-        Srgb::new(r, g, b).into_format()
-    } else {
-        Srgb::from_hex(&cmd.color)?.into_format()
+                let (r, g, b) = match rgb.as_slice() {
+                    [first, second, third] => (
+                        first.parse::<f32>()?,
+                        second.parse::<f32>()?,
+                        third.parse::<f32>()?,
+                    ),
+                    _ => bail!("Rgb value is incorrect!"),
+                };
+                Srgb::new(r, g, b).into_format()
+            } else {
+                Srgb::from_hex(&color)?.into_format()
+            }
+        }
+        None => bail!(
+            "{ERR_MSG}: the following required arguments were not provided:\n  {}",
+            "<COLOR>".green()
+        ),
     };
 
     let colors = match cmd.backend {

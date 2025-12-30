@@ -5,7 +5,7 @@ use crate::backend::{BackendEnum, BalanceContrast};
 #[derive(Parser, Debug)]
 #[command(version, long_about = None)]
 pub struct Cli {
-    pub color: String,
+    pub color: Option<String>,
 
     #[arg(long)]
     pub from_srgb: bool,
@@ -21,7 +21,7 @@ pub struct Cli {
     #[arg(short = 'v')]
     pub verbose: bool,
 
-    #[arg(short, long, default_value_t = true)]
+    #[arg(short, long)]
     pub apply: bool,
 
     #[arg(short, long)]

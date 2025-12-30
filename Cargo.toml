@@ -18,5 +18,11 @@ serde_json = { version = "1.0.148", features = ["indexmap"] }
 
 [features]
 default = []
-seq_win = [ "dep:dialoguer" ]
-config = [ "dep:directories" ]
+seq_win = ["dep:dialoguer"]
+config = ["dep:directories"]
+
+[profile.release]
+lto = true
+opt-level = 3
+incremental = true
+
