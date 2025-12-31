@@ -23,8 +23,8 @@ pub fn retone_to_l(color: &Hsv, l_target: f32) -> Hsv {
     let chroma = a2.hypot(b2);
     if chroma > MAX_CHROMA {
         let k = MAX_CHROMA / chroma;
-        a2 = k;
-        b2 = k;
+        a2 *= k;
+        b2 *= k;
     }
 
     Lab::new(l_target, a2, b2).to_hsv()
