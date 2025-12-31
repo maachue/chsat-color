@@ -5,7 +5,7 @@ use crate::{
     colors::{convert::ToSrgb, unified::AnsiIndex},
 };
 
-use palette::{Clamp, Lab, Srgb};
+use palette::{Lab, Srgb};
 
 use crate::colors::{convert::ColorExt, delta::delta_phi_star};
 
