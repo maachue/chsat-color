@@ -15,6 +15,7 @@ without ΔΦ*:
 
 - `dms` backend fake by me (Lab backend) with ΔΦ*:
 
+(old)
 0 = #1a1a1a
 1 = #e44c80 !
 2 = #97d66e
@@ -32,15 +33,15 @@ without ΔΦ*:
 14 = #967742 !
 15 = #ffffff
 
+(new)
 00 =      #1a1a1a
 01 =      #e44c80
 02 =      #97d66e
 03 =      #dbae7b
-04 =      #bc7328 !
-05 =      #bc946b !
-06 =      #fbb973 !
-07 =      #aab1be !
-
+04 =      #bc7328
+05 =      #bd946b
+06 =      #fcb974
+07 =      #abb1bf
 08 =      #5c6270
 09 =      #e05f8f
 10 =      #a9e086

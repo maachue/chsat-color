@@ -35,7 +35,7 @@ fn balance_contrast_dps_l_star(color: &Lab, bg: &Lab, min_l: f32, is_light: bool
         lf = (lf + dir * STEP).clamp(0.0, 100.0);
         let cand = Lab::new(lf, af, bf);
         if dps_ba(&cand, &bg.to_lab(), is_light) >= min_l {
-            return cand.clamp();
+            return cand;
         }
     }
 
@@ -51,7 +51,7 @@ pub fn balance_dps(
 
     let normal: [Srgb<f32>; 8] = std::array::from_fn(|i| {
         match i {
-            0 /* AnsiIndex::Black */ => colors.normal[i],
+            0 | 6 | 7 /* AnsiIndex::Black | AnsiIndex::Cyan /* this color doesnt need to balance */ | AnsiIndex::White */ => colors.normal[i],
             _ => balance_contrast_dps_l_star(&colors.normal[i].to_lab(), &bg, target.0, is_light).to_srgb(),
         }
     });
