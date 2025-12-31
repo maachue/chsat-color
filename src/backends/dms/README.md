@@ -19,7 +19,7 @@ All Rust source code in this repository:
 
 ## Disclaimer
 
-The author is **not a color science expert**.
+The author is **not a color scientist**.
 
 This software is provided **as-is** and should be evaluated carefully
 before use.
