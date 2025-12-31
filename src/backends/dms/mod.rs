@@ -1,3 +1,28 @@
+/*
+ * # DMS backend
+ *
+ * This module is based on the **DMS color algorithm**
+ * originally implemented by **DankMaterialShell**.
+ *
+ * Original algorithm
+ * © 2025 Avenge Media LLC — MIT License
+ *
+ * This repository provides a **clean-room reimplementation**
+ * written in Rust, with **significant structural and behavioral differences**
+ * from the original implementation.
+ *
+ * All Rust source code in this repository:
+ * © 2025 Maachue — MIT License
+*/
+
+/*
+ * NOTE:
+ * The author is **not a color scientist**.
+ *
+ * This software is provided **as-is** and should be evaluated carefully
+ * before use.
+*/
+
 use anyhow::Result;
 use palette::Hsv;
 
