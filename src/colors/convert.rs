@@ -2,6 +2,8 @@ use anyhow::Result;
 use palette::{Clamp, Hsv, IntoColor, Lab, Lch, Oklch, Srgb};
 use std::str::FromStr;
 
+// NOTE: is it really need to refactor this using `thiserror`?
+// NOTE: is `*self` safe?
 pub trait ToSrgb {
     fn to_srgb(&self) -> Srgb<f32>;
 }

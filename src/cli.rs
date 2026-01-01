@@ -1,6 +1,7 @@
 use clap::{Parser, ValueEnum};
 
 use crate::backends::{BackendEnum, BalanceContrast};
+use crate::display::DumpMode;
 
 #[derive(Parser, Debug)]
 #[command(version, long_about = None)]
@@ -35,26 +36,6 @@ pub struct Cli {
 
     #[arg(long, default_value = "dark")]
     pub mode: Mode,
-}
-
-#[derive(ValueEnum, Clone, Copy, Debug)]
-pub enum DumpMode {
-    #[value(name = "HumanReadable", alias = "human-readable", alias = "human")]
-    HumanReadable,
-
-    #[value(
-        name = "Block",
-        alias = "HumanReadableBlock",
-        alias = "human-readable-block",
-        alias = "block"
-    )]
-    Block,
-
-    #[value(name = "JsonSimplifed", alias = "json-simplified", alias = "json")]
-    JsonSimplified,
-
-    #[value(name = "JsonPretty", alias = "json-pretty", alias = "matugen")]
-    JsonPretty,
 }
 
 #[derive(ValueEnum, Clone, Copy, Debug)]

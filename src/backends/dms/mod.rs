@@ -46,9 +46,9 @@ fn derive_container(color: &Hsv) -> Hsv {
 fn get(color: &Hsv, container: &Hsv) -> Result<Calculator<Hsv>> {
     let bright_blue = retone_to_l(color, 85.0);
 
-    let hues = calculator::get_hues(color, container, &bright_blue)?;
+    let hues     = calculator::get_hues(color, container, &bright_blue)?;
     let saturations = calculator::get_saturation(color, container, &bright_blue)?;
-    let values = calculator::get_value(color, container, &bright_blue)?;
+    let values      = calculator::get_value(color, container, &bright_blue)?;
 
     Ok(Calculator::<Hsv> {
         normal: std::array::from_fn(|i| {

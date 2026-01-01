@@ -12,6 +12,7 @@ mod unix;
 #[cfg(target_family = "windows")]
 mod win;
 
+#[allow(unused_variables)] // annoying
 pub fn apply(ansi: &AnsiPaletteHex) -> Result<()> {
     #[cfg(target_family = "unix")]
     unix::unix_term(ansi)?;

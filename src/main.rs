@@ -6,8 +6,9 @@ use owo_colors::OwoColorize;
 use palette::Srgb;
 
 use crate::{
-    cli::{DumpMode, Mode},
+    cli::Mode,
     colors::convert::FromHexToSrgbf32,
+    display::DumpMode,
     utils::{DOING_WORK_MSG, ERR_MSG, WARN_MSG, read_stdin},
 };
 
@@ -21,6 +22,7 @@ mod term;
 
 mod backends;
 
+// TODO: better erorr msg
 fn main() -> Result<()> {
     let mut cmd = cli::Cli::parse();
 
@@ -29,7 +31,10 @@ fn main() -> Result<()> {
     }
 
     if cmd.apply && std::env::consts::OS == "windows" {
-        eprintln!("{}: `--apply` flag hasn't support windows yet.", WARN_MSG)
+        eprintln!(
+            "{}: `--apply` flag hasn't support fully for windows yet.",
+            WARN_MSG
+        )
     }
 
     if cmd.color.is_none()
@@ -38,13 +43,28 @@ fn main() -> Result<()> {
         cmd.color = Some(stdin)
     }
 
+    if let Some(v) = cmd.color.as_deref()
+        && v.is_empty()
+    {
+        bail!(
+            "{ERR_MSG}: Something went wrong. {} is empty!",
+            "<COLOR>".green()
+        )
+    }
+
     if !cmd.quiet {
         eprintln!(
-            "{} ANSI palette with `{}` backend, {} mode, with input {:?}",
+            "{} ANSI palette with `{}` backend, {} mode, with input {}",
             DOING_WORK_MSG.style("   Calculating"),
             cmd.backend,
             cmd.mode,
-            cmd.color,
+            match cmd.color.as_deref() {
+                Some(v) => v,
+                None => bail!(
+                    "{ERR_MSG}: the following required arguments were not provided:\n  {}",
+                    "<COLOR>".green()
+                ),
+            },
         );
     }
 
