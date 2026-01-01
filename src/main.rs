@@ -7,7 +7,7 @@ use palette::Srgb;
 
 use crate::{
     cli::Mode,
-    colors::convert::FromHexToSrgbf32,
+    colors::convert::{ColorExt, FromHexToSrgbf32},
     display::DumpMode,
     utils::{DOING_WORK_MSG, NOTE_MSG, WARN_MSG, read_stdin},
 };
@@ -59,22 +59,6 @@ fn main() -> Result<()> {
         )
     }
 
-    if !cmd.quiet {
-        eprintln!(
-            "{} ANSI palette with `{}` backend, {} mode, with input {}",
-            DOING_WORK_MSG.style("   Calculating"),
-            cmd.backend,
-            cmd.mode,
-            match cmd.color.as_deref() {
-                Some(v) => v,
-                None => bail!(
-                    "The following required arguments were not provided:\n  {}",
-                    "<COLOR>".green()
-                ),
-            },
-        );
-    }
-
     let start: Option<Instant> = match cmd.quiet {
         false => Some(Instant::now()),
         true => None,
@@ -85,7 +69,7 @@ fn main() -> Result<()> {
         Mode::Light => true,
     };
 
-    let color: Srgb<f32> = match cmd.color {
+    let color: Srgb<f32> = match cmd.color.as_deref() {
         Some(color) => {
             if cmd.from_srgb {
                 let rgb: Vec<&str> = color.split(",").collect();
@@ -108,6 +92,20 @@ fn main() -> Result<()> {
             "<COLOR>".green()
         ),
     };
+
+    if !cmd.quiet {
+        eprintln!(
+            "{} ANSI palette with `{}` backend, {} mode, with input {} {}",
+            DOING_WORK_MSG.style("   Calculating"),
+            cmd.backend,
+            cmd.mode,
+            "  ".on_color(color.to_owo()),
+            match cmd.color.as_deref() {
+                Some(v) => v,
+                None => bail!("How?"), // unreachable
+            },
+        );
+    }
 
     let colors = backends::generate(&color, &cmd.backend, &cmd.balance)?;
 
