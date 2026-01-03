@@ -1,6 +1,6 @@
 <div align="center">
-    <h1>yaat-color</h1>
-    <em>A part of Yet Another Automation Tool</em></br>
+    <h1>chsat-color</h1>
+    <em>A part of Chue's Silly Automation Tools</em></br>
     <em> — ANSI palette generator — </em>
 <br/> <!-- badges here -->
 <br/>
@@ -13,14 +13,14 @@ A ANSI palette generator with simple input.
 ### Via Cargo
 
 ```bash
-cargo install --git https://github.com/maachue/yaat-color.git
+cargo install --git https://github.com/maachue/chsat-color.git
 ```
 
 ### Build from Source
 
 ```bash
-git clone https://github.com/maachue/yaat-color.git
-cd yaat-color
+git clone https://github.com/maachue/chsat-color.git
+cd chsat-color
 cargo build --release
 ```
 
