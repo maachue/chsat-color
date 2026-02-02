@@ -1,0 +1,3 @@
+[submodule "chsat-color-lib"]
+	path = chsat-color-lib
+	url = git@github.com:maachue/chsat-color-lib.git
