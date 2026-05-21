@@ -8,7 +8,10 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 include(FetchContent)
 
-add_executable(${PROJECT_NAME} src/main.cc)
+add_executable(${PROJECT_NAME}
+  src/main.cc
+  src/cli.cc
+)
 
 find_package(fmt QUIET)
 

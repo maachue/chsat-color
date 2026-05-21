@@ -9,3 +9,5 @@
 
 #include "colorlib/to_linear.h"
 #include "colorlib/to_xyz.h"
+
+#include "colorlib/calc/delta_e.h"

@@ -2,6 +2,7 @@
 
 #include <array>
 #include <cmath>
+#include <numbers>
 
 #include <gcem.hpp>
 
@@ -29,6 +30,21 @@ constexpr vec3<T> vec_multiply_matrix(vec3<T> const &vec,
 //         allowed calculate at compile-time or runtime specific           //
 //=========================================================================//
 
+template <typename T> constexpr T rad_to_deg(T const val) {
+  return val * (T(180) / std::numbers::pi_v<T>);
+}
+template <typename T> constexpr T deg_to_rad(T const val) {
+  return val * (std::numbers::pi_v<T> / T(180));
+}
+
+template <typename T> constexpr T abs(T const val) {
+  if consteval {
+    return gcem::abs(val);
+  } else {
+    return std::abs(val);
+  }
+}
+
 template <typename Tx, typename Ty>
 constexpr auto pow(Tx const &x, Ty const &y) {
   if consteval {
@@ -52,6 +68,30 @@ constexpr auto atan2(Ty const &y, Tx const &x) {
     return gcem::atan2(y, x);
   } else {
     return std::atan2(y, x);
+  }
+}
+
+template <typename Tx> constexpr auto sin(Tx const &x) {
+  if consteval {
+    return gcem::sin(x);
+  } else {
+    return std::sin(x);
+  }
+}
+
+template <typename Tx> constexpr auto cos(Tx const &x) {
+  if consteval {
+    return gcem::cos(x);
+  } else {
+    return std::cos(x);
+  }
+}
+
+template <typename Tx> constexpr auto exp(Tx const &x) {
+  if consteval {
+    return gcem::exp(x);
+  } else {
+    return std::exp(x);
   }
 }
 } // namespace color::math
