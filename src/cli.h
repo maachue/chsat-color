@@ -1,6 +1,7 @@
 #pragma once
 
 #include <optional>
+#include <string>
 #include <string_view>
 
 #include "colorlib/generic_rgb.h"
@@ -14,5 +15,5 @@ struct Cli {
 };
 
 int cli_parse(Cli **opts, int argc, char *argv[],
-              std::string_view *from_stdin); // bad pattern, I know
+              std::string *from_stdin); // bad pattern, I know
 } // namespace cli

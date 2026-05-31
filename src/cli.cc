@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <cstdio>
+#include <string>
 #include <string_view>
 
 #include <fmt/base.h>
@@ -13,7 +14,6 @@ constexpr std::string_view BLUE_BOLD = "\x1b[34;1m";
 constexpr std::string_view BOLD_UNDERLINE = "\x1b[1;4m";
 constexpr std::string_view BOLD = "\x1b[1m";
 constexpr std::string_view RESET = "\x1b[0m";
-
 template <typename... T> void error(fmt::format_string<T...> fmt, T &&...args) {
   fmt::print(stdout, "{}error:{} ", RED_BOLD, RESET);
   fmt::vprintln(stdout, fmt.get(), fmt::make_format_args(args...));
@@ -43,8 +43,7 @@ int parse_position(std::tuple<std::uint8_t, std::uint8_t, std::uint8_t> &result,
   return 0;
 }
 
-int cli_parse(Cli **opts, int argc, char *argv[],
-              std::string_view *from_stdin) {
+int cli_parse(Cli **opts, int argc, char *argv[], std::string *from_stdin) {
   std::string_view position{};
   auto error_lambda = [&opts]<typename... T>(fmt::format_string<T...> fmt,
                                              T &&...args) {
